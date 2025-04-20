@@ -1,6 +1,6 @@
-# Secure Script Protector - Usage Guide
+# ScriptEncryptor - Usage Guide
 
-This comprehensive guide covers all aspects of using the Secure Script Protector to protect your Python scripts with multi-layer encryption, time-based expiration, and license management.
+This comprehensive guide covers all aspects of using ScriptEncryptor to protect your Python scripts with multi-layer encryption, time-based expiration, and license management.
 
 ## Table of Contents
 
@@ -24,8 +24,8 @@ This comprehensive guide covers all aspects of using the Secure Script Protector
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/secure-script-protector.git
-   cd secure-script-protector
+   git clone https://github.com/boltsky/ScriptEncryptor.git
+   cd ScriptEncryptor
    ```
 
 2. Install dependencies:
@@ -35,12 +35,12 @@ This comprehensive guide covers all aspects of using the Secure Script Protector
 
 ## Basic Usage
 
-The Secure Script Protector has an interactive interface that guides you through protecting scripts and managing licenses.
+ScriptEncryptor has an interactive interface that guides you through protecting scripts and managing licenses.
 
 To start the tool:
 
 ```bash
-python src/secure_script_protector.py
+python src/ScriptEncryptor.py
 ```
 
 You will be presented with a menu offering the following options:

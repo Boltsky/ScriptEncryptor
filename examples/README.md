@@ -1,6 +1,6 @@
 # Example Scripts
 
-This directory contains example scripts that demonstrate the use of the Secure Script Protector.
+This directory contains example scripts that demonstrate the use of ScriptEncryptor.
 
 ## Demo Script
 
@@ -18,9 +18,9 @@ The `demo_script.py` file is a simple demonstration script that shows functional
    python demo_script.py
    ```
 
-2. Protect the script using Secure Script Protector:
+2. Protect the script using ScriptEncryptor:
    ```
-   python ../src/secure_script_protector.py
+   python ../src/ScriptEncryptor.py
    ```
    Follow the prompts to protect the demo script.
 
@@ -34,7 +34,7 @@ The `demo_script.py` file is a simple demonstration script that shows functional
 To protect your own scripts:
 
 1. Make sure your script is working correctly first
-2. Use the Secure Script Protector to encrypt it
+2. Use ScriptEncryptor to encrypt it
 3. Set appropriate expiration dates and messages
 4. Choose whether to display license information
 5. Distribute only the protected version
