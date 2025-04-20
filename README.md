@@ -1,4 +1,4 @@
-# Secure Script Protector
+# ScriptEncryptor
 
 A powerful Python tool for protecting your scripts with multi-layer encryption, time-based expiration, and license management.
 
@@ -19,8 +19,8 @@ A powerful Python tool for protecting your scripts with multi-layer encryption, 
 
 1. Clone this repository:
    ```
-   git clone https://github.com/yourusername/secure-script-protector.git
-   cd secure-script-protector
+   git clone https://github.com/boltsky/ScriptEncryptor.git
+   cd ScriptEncryptor
    ```
 
 2. Install the required dependencies:
@@ -90,6 +90,10 @@ See the [examples](./examples/) directory for sample scripts and usage demonstra
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Author & Contact
+
+Created by [boltsky](https://github.com/boltsky)
 
 ## Disclaimer
 

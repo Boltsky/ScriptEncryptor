@@ -1,8 +1,20 @@
+#!/usr/bin/env python3
+"""
+ScriptEncryptor
+
+A powerful Python tool for protecting scripts with multi-layer encryption,
+time-based expiration, and license management.
+
+Author: boltsky (https://github.com/boltsky)
+Repository: https://github.com/boltsky/ScriptEncryptor
+Version: 1.0.0
+"""
+
+# Original notice:
 # This tool is free and not for sale. Please do not sell it.
 # Do not remove credits to appreciate our effort and encourage us to continue providing such (tools - bots - exploits)
-# Trust in your creator. If we see you selling this tool, we'll make you regret it.
+# Trust in your creator. 
 #==========================#
-
 import base64
 import hashlib
 import json
@@ -19,9 +31,9 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives import hashes
 
-class SecureScriptProtector:
+class ScriptEncryptor:
     """
-    A comprehensive tool that combines multi-layer encryption with time-based protection
+    A powerful tool that combines multi-layer encryption with time-based protection
     and license management to secure Python scripts.
     
     Features:
@@ -30,6 +42,7 @@ class SecureScriptProtector:
     - License management and reactivation
     - Code integrity verification
     - Custom expiration messages
+    - Customizable license information display
     - Obfuscated output
     """
     def __init__(self):
@@ -503,12 +516,22 @@ def get_valid_path(prompt, must_exist=False):
             continue
             
         return path
-
 def main():
     """Main execution function."""
-    print("\n===== Secure Script Protector =====")
-    print("This tool is free and not for sale. Please do not sell it.")
-    print("===================================\n")
+    VERSION = "1.0.0"
+    print(r"""
+     _____           _       _   _____                             _             
+    /  ___|         (_)     | | |  ___|                           | |            
+    \ `--.  ___ _ __ _ _ __ | |_| |__ _ __   ___ _ __ _   _ _ __ | |_ ___  _ __ 
+     `--. \/ __| '__| | '_ \| __|  __| '_ \ / __| '__| | | | '_ \| __/ _ \| '__|
+    /\__/ / (__| |  | | |_) | |_| |__| | | | (__| |  | |_| | |_) | || (_) | |   
+    \____/ \___|_|  |_| .__/ \__|____/_| |_|\___|_|   \__, | .__/ \__\___/|_|   
+                       | |                              __/ | |                  
+                       |_|                             |___/|_|                  
+    """)
+    print(f"Version: {VERSION}")
+    print(f"GitHub: https://github.com/boltsky/ScriptEncryptor")
+    print("\n" + "="*70)
     
     while True:
         print("Select operation:")
@@ -536,7 +559,7 @@ def main():
                     contact_info = input("\nEnter additional contact information to display (leave blank for none):\n")
                 
                 print("\nProtecting script...")
-                protector = SecureScriptProtector()
+                protector = ScriptEncryptor()
                 
                 try:
                     output_path = protector.protect_script(
@@ -553,10 +576,10 @@ def main():
                     print(f"\nSuccess! Protected script saved to: {output_path}")
                     
                     if enable_reactivation:
-                        script_basename = os.path.splitext(os.path.basename(output_file))[0]
+                        script_basename = os.path.splitext(os.path.basename(output_file if output_file else output_path))[0]
                         if script_basename.startswith("protected_"):
                             script_basename = script_basename[len("protected_"):]
-                        private_key_path = os.path.join(os.path.dirname(os.path.abspath(output_file)), f"{script_basename}_private.pem")
+                        private_key_path = os.path.join(os.path.dirname(os.path.abspath(output_path)), f"{script_basename}_private.pem")
                         print(f"Private key saved to: {private_key_path}")
                         print("IMPORTANT: Keep the private key secure. It is required for license reactivation.")
                         
@@ -572,7 +595,7 @@ def main():
                 expire_datetime = get_valid_datetime()
                 
                 print("\nGenerating license key...")
-                protector = SecureScriptProtector()
+                protector = ScriptEncryptor()
                 
                 try:
                     license_path = protector.generate_license_key(private_key_path, expire_datetime)
@@ -582,17 +605,20 @@ def main():
                     
             elif choice == 3:
                 # Exit
-                print("\nExiting Secure Script Protector. Goodbye!")
+                print("\nExiting ScriptEncryptor. Goodbye!")
+                print("\nVisit https://github.com/boltsky/ScriptEncryptor for updates and new features.")
                 break
                 
             else:
                 print("\nInvalid choice. Please enter 1, 2, or 3.")
                 
-            input("\nPress Enter to continue...")
+            print("\n" + "-"*70)
+            input("Press Enter to continue...")
             
         except ValueError:
             print("\nInvalid input. Please enter a number.")
-            input("\nPress Enter to continue...")
+            print("\n" + "-"*70)
+            input("Press Enter to continue...")
 
 if __name__ == "__main__":
     main()
