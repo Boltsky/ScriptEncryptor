@@ -5,8 +5,8 @@ ScriptEncryptor
 A powerful Python tool for protecting scripts with multi-layer encryption,
 time-based expiration, and license management.
 
-Author: boltsky (https://github.com/boltsky)
-Repository: https://github.com/boltsky/ScriptEncryptor
+Author: Boltsky (https://github.com/Boltsky)
+Repository: https://github.com/Boltsky/ScriptEncryptor
 Version: 1.0.0
 """
 
@@ -547,7 +547,7 @@ def main():
                        |_|                             |___/|_|                  
     """)
     print(f"Version: {VERSION}")
-    print(f"GitHub: https://github.com/boltsky/ScriptEncryptor")
+    print(f"GitHub: https://github.com/Boltsky/ScriptEncryptor")
     print("\n" + "="*70)
     
     while True:
@@ -630,7 +630,7 @@ def main():
             elif choice == 3:
                 # Exit
                 print("\nExiting ScriptEncryptor. Goodbye!")
-                print("\nVisit https://github.com/boltsky/ScriptEncryptor for updates and new features.")
+                print("\nVisit https://github.com/Boltsky/ScriptEncryptor for updates and new features.")
                 break
                 
             else:
@@ -646,3 +646,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

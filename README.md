@@ -19,7 +19,7 @@ A powerful Python tool for protecting your scripts with multi-layer encryption, 
 
 1. Clone this repository:
    ```
-   git clone https://github.com/boltsky/ScriptEncryptor.git
+   git clone https://github.com/Boltsky/ScriptEncryptor.git
    cd ScriptEncryptor
    ```
 
@@ -93,9 +93,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Author & Contact
 
-Created by [boltsky](https://github.com/boltsky)
+Created by [Boltsky](https://github.com/Boltsky)
 
 ## Disclaimer
 
 This tool is provided for educational and legitimate use cases only. The author is not responsible for any misuse or illegal activities conducted with this tool.
+
 

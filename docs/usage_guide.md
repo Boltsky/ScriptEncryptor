@@ -24,7 +24,7 @@ This comprehensive guide covers all aspects of using ScriptEncryptor to protect 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/boltsky/ScriptEncryptor.git
+   git clone https://github.com/Boltsky/ScriptEncryptor.git
    cd ScriptEncryptor
    ```
 
@@ -246,4 +246,5 @@ A: When a script expires, it will display the custom expiration message you defi
 **Q: Can users modify the system time to bypass expiration?**
 
 A: While the tool doesn't have specific protections against time manipulation, you can implement additional checks in your script (like online verification) if this is a concern.
+
 
