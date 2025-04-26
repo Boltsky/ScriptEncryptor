@@ -40,7 +40,7 @@ ScriptEncryptor has an interactive interface that guides you through protecting 
 To start the tool:
 
 ```bash
-python src/ScriptEncryptor.py
+python ScriptEncryptor.py
 ```
 
 You will be presented with a menu offering the following options:

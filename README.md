@@ -33,7 +33,7 @@ A powerful Python tool for protecting your scripts with multi-layer encryption, 
 ### Protecting a Script
 
 ```bash
-python src/ScriptEncryptor.py
+python ScriptEncryptor.py
 ```
 
 Follow the interactive prompts:
@@ -52,7 +52,7 @@ Follow the interactive prompts:
 If you enabled reactivation when protecting a script:
 
 ```bash
-python src/ScriptEncryptor.py
+python ScriptEncryptor.py
 ```
 
 1. Select option 2 to generate a license key
