@@ -1,2 +1,0 @@
-A powerful Python tool for protecting scripts with multi-layer encryption, time-based expiration, and license management. Features include customizable encryption layers, license reactivation, integrity verification, and expiration control.
-

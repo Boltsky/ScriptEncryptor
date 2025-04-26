@@ -92,6 +92,9 @@ class ScriptEncryptor:
                              show_license_info=True, contact_info=None):
         """Create the wrapper code that contains the encrypted script and protection logic."""
         
+        # Determine if expiration is enabled
+        has_expiration = expire_datetime is not None
+        
         wrapper_code = f'''
 import base64
 import hashlib
@@ -109,7 +112,8 @@ from cryptography.hazmat.primitives import hashes
 ENCRYPTED_DATA = {encrypted_data!r}
 FERNET_KEY = {self.fernet_key!r}
 LAYERS = {layers}
-EXPIRE_DATETIME = "{expire_datetime}"
+HAS_EXPIRATION = {has_expiration}
+EXPIRE_DATETIME = {f'"{expire_datetime}"' if has_expiration else 'None'}
 CODE_HASH = "{code_hash}"
 SCRIPT_BASENAME = "{script_basename}"
 ENABLE_REACTIVATION = {enable_reactivation}
@@ -188,10 +192,13 @@ if __name__ == "__main__":
             print("Script tampering detected! Code integrity check failed.")
             sys.exit(1)
         
-        # Check expiration
+        # Check expiration if enabled
         current_time = datetime.now(UTC)
-        # Parse the expiration time and make it timezone-aware
-        expire_time = datetime.strptime(EXPIRE_DATETIME, "%Y-%m-%d %H:%M:%S").replace(tzinfo=UTC)
+        
+        # Only process expiration if it's enabled
+        if HAS_EXPIRATION:
+            # Parse the expiration time and make it timezone-aware
+            expire_time = datetime.strptime(EXPIRE_DATETIME, "%Y-%m-%d %H:%M:%S").replace(tzinfo=UTC)
         
         # Check for license reactivation
         # Check for license reactivation
@@ -222,9 +229,13 @@ if __name__ == "__main__":
                 print(f"License validation failed: {str(e)}")
                 # Continue with original expiration time
         
-        # Display expiration information
-        time_remaining = expire_time - current_time
-        formatted_time = format_time_remaining(time_remaining)
+        # Display expiration information if enabled
+        if HAS_EXPIRATION:
+            time_remaining = expire_time - current_time
+            formatted_time = format_time_remaining(time_remaining)
+        else:
+            time_remaining = None
+            formatted_time = "No Expiration"
         
         # Display license information if enabled
         if SHOW_LICENSE_INFO:
@@ -235,13 +246,20 @@ if __name__ == "__main__":
             print(f"╔{'═' * box_width}╗")
             print(f"║{' ' * title_padding}{title}{' ' * (box_width - len(title) - title_padding)}║")
             print(f"╠{'═' * box_width}╣")
-            status = 'Active' if time_remaining.total_seconds() > 0 else 'EXPIRED'
+            status = 'Active' if not HAS_EXPIRATION or time_remaining.total_seconds() > 0 else 'EXPIRED'
             activation_date = current_time.strftime('%Y-%m-%d %H:%M:%S UTC')
-            print(f"║  License Status:     {status}{' ' * (box_width - 21 - len(status))}║")
+            activation_date = current_time.strftime('%Y-%m-%d %H:%M:%S UTC')
             print(f"║  Activation Date:    {activation_date}{' ' * (box_width - 21 - len(activation_date))}║")
-            expire_str = expire_time.strftime('%Y-%m-%d %H:%M:%S UTC')
-            print(f"║  Expiration Date:    {expire_str}{' ' * (box_width - 21 - len(expire_str))}║")
-            print(f"║  Time Remaining:     {formatted_time}{' ' * (box_width - 21 - len(formatted_time))}║")
+            
+            # Only show expiration information if it's enabled
+            if HAS_EXPIRATION:
+                expire_str = expire_time.strftime('%Y-%m-%d %H:%M:%S UTC')
+                print(f"║  Expiration Date:    {expire_str}{' ' * (box_width - 21 - len(expire_str))}║")
+                print(f"║  Time Remaining:     {formatted_time}{' ' * (box_width - 21 - len(formatted_time))}║")
+            else:
+                no_expiry_msg = "Never (No Expiration)"
+                print(f"║  Expiration Date:    {no_expiry_msg}{' ' * (box_width - 21 - len(no_expiry_msg))}║")
+                print(f"║  Time Remaining:     {formatted_time}{' ' * (box_width - 21 - len(formatted_time))}║")
             
             # Display contact information if provided
             if CONTACT_INFO:
@@ -252,13 +270,14 @@ if __name__ == "__main__":
                     if line:
                         print(f"║  {line}{' ' * (box_width - 3 - len(line))}║")
             
-            # Add warning based on remaining time
-            seconds_remaining = time_remaining.total_seconds()
-            if seconds_remaining > 0:
+            # Add warning based on remaining time (only if expiration is enabled)
+            if HAS_EXPIRATION:
+                seconds_remaining = time_remaining.total_seconds()
                 if seconds_remaining < 60:  # Less than 1 minute - FINAL COUNTDOWN
                     warning = f"⚠️ FINAL COUNTDOWN: Script expires in {int(seconds_remaining)} seconds!"
                     print(f"║  {'!' * 5} URGENT NOTICE {'!' * 5}{' ' * (box_width - 24)}║")
                     print(f"║  Warning Status:     {warning}{' ' * (box_width - 21 - len(warning))}║")
+                    print(f"║  {'!' * 5} RENEW NOW {'!' * 5}{' ' * (box_width - 20)}║")
                     print(f"║  {'!' * 5} RENEW NOW {'!' * 5}{' ' * (box_width - 20)}║")
                 elif seconds_remaining < 300:  # Less than 5 minutes
                     warning = "⚠️ URGENT: Script expires in less than 5 minutes!"
@@ -278,8 +297,8 @@ if __name__ == "__main__":
             
             print(f"╚{'═' * box_width}╝")
         
-        # Check if script has expired
-        if current_time > expire_time:
+        # Check if script has expired (only if expiration is enabled)
+        if HAS_EXPIRATION and current_time > expire_time:
             print(EXPIRE_MESSAGE)
             with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "expired_logs.txt"), 'a') as f:
                 f.write(f"Expired execution attempt at {current_time.strftime('%Y-%m-%d %H:%M:%S.%f')} UTC\\n")
@@ -340,10 +359,8 @@ if __name__ == "__main__":
                 expire_datetime = utc_dt.strftime("%Y-%m-%d %H:%M:%S")
             except ValueError:
                 raise ValueError("Invalid datetime format. Use YYYY-MM-DD HH:MM:SS")
-        else:
-            # Default to 30 days from now (in UTC)
-            expire_dt = datetime.now(UTC) + datetime.timedelta(days=30)
-            expire_datetime = expire_dt.strftime("%Y-%m-%d %H:%M:%S")
+        # If expire_datetime is None, it means no expiration is desired
+        # We'll handle this in the wrapper code
         try:
             with open(input_path, 'r', encoding='utf-8') as f:
                 original_code = f.read()
@@ -520,8 +537,8 @@ def main():
     """Main execution function."""
     VERSION = "1.0.0"
     print(r"""
-     _____           _       _   _____                             _             
-    /  ___|         (_)     | | |  ___|                           | |            
+     _____           _       _   _____                            _             
+    /  ___|         (_)     | | |  ___|                          | |            
     \ `--.  ___ _ __ _ _ __ | |_| |__ _ __   ___ _ __ _   _ _ __ | |_ ___  _ __ 
      `--. \/ __| '__| | '_ \| __|  __| '_ \ / __| '__| | | | '_ \| __/ _ \| '__|
     /\__/ / (__| |  | | |_) | |_| |__| | | | (__| |  | |_| | |_) | || (_) | |   
@@ -550,8 +567,15 @@ def main():
                     
                 output_file = get_valid_path("Enter path for protected output (leave blank for default): ")
                 layers = get_valid_layers()
-                expire_datetime = get_valid_datetime()
-                expire_message = input("\nEnter message to display when script expires: ")
+                
+                # Ask whether to set an expiry date
+                set_expiry = input("\nSet an expiry date for the script? (y/n): ").lower() == 'y'
+                if set_expiry:
+                    expire_datetime = get_valid_datetime()
+                    expire_message = input("\nEnter message to display when script expires: ")
+                else:
+                    expire_datetime = None
+                    expire_message = "This script has expired."  # Default message, won't be used without expiration
                 enable_reactivation = input("\nEnable license reactivation? (y/n): ").lower() == 'y'
                 show_license_info = input("\nDisplay license information in the protected script? (y/n): ").lower() == 'y'
                 contact_info = None
